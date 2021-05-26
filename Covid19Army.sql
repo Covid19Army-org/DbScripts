@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS `ActivityLog`
  `entitytype`     varchar(8) NOT NULL ,
  `entityid`       bigint NOT NULL ,
  `date_created`   datetime NOT NULL ,
+ `clientip`		  varchar(32) NOT NULL,
 
 PRIMARY KEY (`activitylogid`)
 );
@@ -42,7 +43,7 @@ UNIQUE KEY `uq_activity_name` (`name`)
 -- ***************************************************;
 
 DROP TABLE IF EXISTS `EntityTypes`;
-
+ 
 
 
 -- ************************************** `EntityTypes`
@@ -74,10 +75,10 @@ CREATE TABLE IF NOT EXISTS `Users`
  `countrycode`                 int NOT NULL ,
  `isvolunteer`                 bit NOT NULL ,
  `date_notification_last_seen` datetime NOT NULL ,
+ `clientip`			 		   varchar(32) NOT NULL,
 
 PRIMARY KEY (`userid`),
-UNIQUE KEY `uq_users_mobilenumber` (`mobilenumber`),
-constraint CK_users_mobilenumber check (mobilenumber like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+UNIQUE KEY `uq_users_mobilenumber` (`mobilenumber`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
@@ -104,12 +105,11 @@ CREATE TABLE IF NOT EXISTS `Volunteers`
  `date_created`      datetime NOT NULL ,
  `isdelete`          bit NOT NULL ,
  `isactive`          bit NOT NULL ,
- `date_updated`      datetime NOT NULL ,
+ `date_updated`      datetime NOT NULL , 
 
 PRIMARY KEY (`volunteerid`),
 KEY `fkIdx_81` (`userid`),
-CONSTRAINT `FK_80` FOREIGN KEY `fkIdx_81` (`userid`) REFERENCES `users` (`userid`),
-constraint CK_volunteer_contactnumber check (contactnumber like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+CONSTRAINT `FK_80` FOREIGN KEY `fkIdx_81` (`userid`) REFERENCES `users` (`userid`)
 );
 
 
@@ -144,8 +144,7 @@ CREATE TABLE IF NOT EXISTS `HelpRequests`
 
 PRIMARY KEY (`requestid`),
 KEY `fkIdx_16` (`userid`),
-CONSTRAINT `FK_15` FOREIGN KEY `fkIdx_16` (`userid`) REFERENCES `users` (`userid`),
-constraint CK_helprequests_contactnumber check (contactnumber like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+CONSTRAINT `FK_15` FOREIGN KEY `fkIdx_16` (`userid`) REFERENCES `users` (`userid`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
@@ -331,6 +330,25 @@ CREATE TABLE IF NOT EXISTS `MobileVerificationQueue`
  `entitytype`   varchar(8) NOT NULL ,
 
 PRIMARY KEY (`itemid`),
-UNIQUE KEY `uq_mobilequeue_mobile_otp` (`mobilenumber`, `otp`),
-constraint CK_mobileverificationqueue_mobilenumber check (mobilenumber like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]')
+UNIQUE KEY `uq_mobilequeue_mobile_otp` (`mobilenumber`, `otp`)
 );
+
+-- ****************** SqlDBM: MySQL ******************;
+-- ***************************************************;
+
+DROP TABLE IF EXISTS `NewRequestWaitingQueue`;
+
+
+
+-- ************************************** `NewRequestWaitingQueue`
+
+CREATE TABLE IF NOT EXISTS `NewRequestWaitingQueue`
+(
+ `itemid`      bigint unsigned NOT NULL AUTO_INCREMENT ,
+ `requestid`   bigint NOT NULL ,
+ `volunteerid` bigint NOT NULL ,
+ `date_created` datetime not null,
+
+PRIMARY KEY (`itemid`)
+);
+
