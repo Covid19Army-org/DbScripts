@@ -1,13 +1,14 @@
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
-
-DROP TABLE IF EXISTS `ActivityLog`;
+-- SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS; 
+-- SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `activitylog`;
 
 
 
 -- ************************************** `ActivityLog`
 
-CREATE TABLE IF NOT EXISTS `ActivityLog`
+CREATE TABLE IF NOT EXISTS `activitylog`
 (
  `activitylogid`  bigint unsigned NOT NULL AUTO_INCREMENT ,
  `from_userid`    bigint NOT NULL ,
@@ -24,13 +25,13 @@ PRIMARY KEY (`activitylogid`)
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `ActivityType`;
+DROP TABLE IF EXISTS `activitytype`;
 
 
 
 -- ************************************** `ActivityType`
 
-CREATE TABLE IF NOT EXISTS `ActivityType`
+CREATE TABLE IF NOT EXISTS `activitytype`
 (
  `activitytypeid` int NOT NULL ,
  `name`           varchar(64) NOT NULL ,
@@ -42,13 +43,13 @@ UNIQUE KEY `uq_activity_name` (`name`)
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `EntityTypes`;
+DROP TABLE IF EXISTS `entitytypes`;
  
 
 
 -- ************************************** `EntityTypes`
 
-CREATE TABLE IF NOT EXISTS `EntityTypes`
+CREATE TABLE IF NOT EXISTS `entitytypes`
 (
  `entitytypeid` int NOT NULL ,
  `name`         varchar(64) NOT NULL ,
@@ -57,13 +58,13 @@ PRIMARY KEY (`entitytypeid`),
 UNIQUE KEY `uq_entitytype_name` (`name`)
 );
 
-DROP TABLE IF EXISTS `Users`;
+DROP TABLE IF EXISTS `users`;
 
 
 
 -- ************************************** `users`
 
-CREATE TABLE IF NOT EXISTS `Users`
+CREATE TABLE IF NOT EXISTS `users`
 (
  `userid`                      bigint unsigned NOT NULL AUTO_INCREMENT ,
  `mobilenumber`                varchar(16) NOT NULL ,
@@ -83,13 +84,13 @@ UNIQUE KEY `uq_users_mobilenumber` (`mobilenumber`)
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `Volunteers`;
+DROP TABLE IF EXISTS `volunteers`;
 
 
 
 -- ************************************** `Volunteers`
 
-CREATE TABLE IF NOT EXISTS `Volunteers`
+CREATE TABLE IF NOT EXISTS `volunteers`
 (
  `volunteerid`       bigint unsigned NOT NULL AUTO_INCREMENT ,
  `userid`            bigint unsigned NOT NULL ,
@@ -116,13 +117,13 @@ CONSTRAINT `FK_80` FOREIGN KEY `fkIdx_81` (`userid`) REFERENCES `users` (`userid
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `HelpRequests`;
+DROP TABLE IF EXISTS `helprequests`;
 
 
 
 -- ************************************** `HelpRequests`
 
-CREATE TABLE IF NOT EXISTS `HelpRequests`
+CREATE TABLE IF NOT EXISTS `helprequests`
 (
  `requestid`               bigint unsigned NOT NULL AUTO_INCREMENT ,
  `userid`                  bigint unsigned NOT NULL ,
@@ -149,13 +150,13 @@ CONSTRAINT `FK_15` FOREIGN KEY `fkIdx_16` (`userid`) REFERENCES `users` (`userid
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `Messages`;
+DROP TABLE IF EXISTS `messages`;
 
 
 
 -- ************************************** `Messages`
 
-CREATE TABLE IF NOT EXISTS `Messages`
+CREATE TABLE IF NOT EXISTS `messages`
 (
  `messageid`    bigint unsigned NOT NULL AUTO_INCREMENT ,
  `from_userid`  bigint unsigned NOT NULL ,
@@ -167,24 +168,24 @@ CREATE TABLE IF NOT EXISTS `Messages`
 
 PRIMARY KEY (`messageid`),
 KEY `fkIdx_122` (`volunteerid`),
-CONSTRAINT `FK_121` FOREIGN KEY `fkIdx_122` (`volunteerid`) REFERENCES `Volunteers` (`volunteerid`),
+CONSTRAINT `FK_121` FOREIGN KEY `fkIdx_122` (`volunteerid`) REFERENCES `volunteers` (`volunteerid`),
 KEY `fkIdx_45` (`from_userid`),
 CONSTRAINT `FK_44` FOREIGN KEY `fkIdx_45` (`from_userid`) REFERENCES `users` (`userid`),
 KEY `fkIdx_48` (`to_userid`),
 CONSTRAINT `FK_47` FOREIGN KEY `fkIdx_48` (`to_userid`) REFERENCES `users` (`userid`),
 KEY `fkIdx_51` (`requestid`),
-CONSTRAINT `FK_50` FOREIGN KEY `fkIdx_51` (`requestid`) REFERENCES `HelpRequests` (`requestid`)
+CONSTRAINT `FK_50` FOREIGN KEY `fkIdx_51` (`requestid`) REFERENCES `helprequests` (`requestid`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `Needs`;
+DROP TABLE IF EXISTS `needs`;
 
 
 
 -- ************************************** `needs`
 
-CREATE TABLE IF NOT EXISTS `Needs`
+CREATE TABLE IF NOT EXISTS `needs`
 (
  `needid` int NOT NULL ,
  `name`   varchar(256) NOT NULL ,
@@ -195,13 +196,13 @@ UNIQUE KEY `uq_needs_name` (`name`)
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `RequestActions`;
+DROP TABLE IF EXISTS `requestactions`;
 
 
 
--- ************************************** `RequestActions`
+-- ************************************** `requestactions`
 
-CREATE TABLE IF NOT EXISTS `RequestActions`
+CREATE TABLE IF NOT EXISTS `requestactions`
 (
  `requestionactionid` bigint unsigned NOT NULL AUTO_INCREMENT ,
  `requestid`          bigint unsigned NOT NULL ,
@@ -212,22 +213,22 @@ CREATE TABLE IF NOT EXISTS `RequestActions`
 
 PRIMARY KEY (`requestionactionid`),
 KEY `fkIdx_119` (`volunteerid`),
-CONSTRAINT `FK_118` FOREIGN KEY `fkIdx_119` (`volunteerid`) REFERENCES `Volunteers` (`volunteerid`),
+CONSTRAINT `FK_118` FOREIGN KEY `fkIdx_119` (`volunteerid`) REFERENCES `volunteers` (`volunteerid`),
 KEY `fkIdx_60` (`requestid`),
-CONSTRAINT `FK_59` FOREIGN KEY `fkIdx_60` (`requestid`) REFERENCES `HelpRequests` (`requestid`),
+CONSTRAINT `FK_59` FOREIGN KEY `fkIdx_60` (`requestid`) REFERENCES `helprequests` (`requestid`),
 KEY `fkIdx_65` (`userid`),
 CONSTRAINT `FK_64` FOREIGN KEY `fkIdx_65` (`userid`) REFERENCES `users` (`userid`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `RequestNeeds`;
+DROP TABLE IF EXISTS `requestneeds`;
 
 
 
--- ************************************** `RequestNeeds`
+-- ************************************** `requestneeds`
 
-CREATE TABLE IF NOT EXISTS `RequestNeeds`
+CREATE TABLE IF NOT EXISTS `requestneeds`
 (
  `requestneedid` bigint unsigned NOT NULL AUTO_INCREMENT ,
  `requestid`     bigint unsigned NOT NULL ,
@@ -235,18 +236,18 @@ CREATE TABLE IF NOT EXISTS `RequestNeeds`
 
 PRIMARY KEY (`requestneedid`),
 KEY `fkIdx_46` (`requestid`),
-CONSTRAINT `FK_45` FOREIGN KEY `fkIdx_46` (`requestid`) REFERENCES `HelpRequests` (`requestid`)
+CONSTRAINT `FK_45` FOREIGN KEY `fkIdx_46` (`requestid`) REFERENCES `helprequests` (`requestid`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `RequestVolunteer`;
+DROP TABLE IF EXISTS `requestvolunteer`;
 
 
 
--- ************************************** `RequestVolunteer`
+-- ************************************** `requestvolunteer`
 
-CREATE TABLE IF NOT EXISTS `RequestVolunteer`
+CREATE TABLE IF NOT EXISTS `requestvolunteer`
 (
  `requestvolunteerid`                  bigint unsigned NOT NULL AUTO_INCREMENT ,
  `requestid`                           bigint unsigned NOT NULL ,
@@ -259,22 +260,22 @@ CREATE TABLE IF NOT EXISTS `RequestVolunteer`
 
 PRIMARY KEY (`requestvolunteerid`),
 KEY `fkIdx_108` (`requestid`),
-CONSTRAINT `FK_107` FOREIGN KEY `fkIdx_108` (`requestid`) REFERENCES `HelpRequests` (`requestid`),
+CONSTRAINT `FK_107` FOREIGN KEY `fkIdx_108` (`requestid`) REFERENCES `helprequests` (`requestid`),
 KEY `fkIdx_112` (`volunteerid`),
-CONSTRAINT `FK_111` FOREIGN KEY `fkIdx_112` (`volunteerid`) REFERENCES `Volunteers` (`volunteerid`)
+CONSTRAINT `FK_111` FOREIGN KEY `fkIdx_112` (`volunteerid`) REFERENCES `volunteers` (`volunteerid`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
 
 
-DROP TABLE IF EXISTS `VolunteerAreas`;
+DROP TABLE IF EXISTS `volunteerareas`;
 
 
 
--- ************************************** `VolunteerAreas`
+-- ************************************** `volunteerareas`
 
-CREATE TABLE IF NOT EXISTS `VolunteerAreas`
+CREATE TABLE IF NOT EXISTS `volunteerareas`
 (
  `volunteerareaid`       bigint unsigned NOT NULL AUTO_INCREMENT ,
  `volunteerid`           bigint unsigned NOT NULL ,
@@ -286,18 +287,18 @@ CREATE TABLE IF NOT EXISTS `VolunteerAreas`
 
 PRIMARY KEY (`volunteerareaid`),
 KEY `fkIdx_85` (`volunteerid`),
-CONSTRAINT `FK_84` FOREIGN KEY `fkIdx_85` (`volunteerid`) REFERENCES `Volunteers` (`volunteerid`)
+CONSTRAINT `FK_84` FOREIGN KEY `fkIdx_85` (`volunteerid`) REFERENCES `volunteers` (`volunteerid`)
 );
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `VolunteerProvidedNeeds`;
+DROP TABLE IF EXISTS `volunteerprovidedneeds`;
 
 
 
--- ************************************** `VolunteerProvidedNeeds`
+-- ************************************** `volunteerprovidedneeds`
 
-CREATE TABLE IF NOT EXISTS `VolunteerProvidedNeeds`
+CREATE TABLE IF NOT EXISTS `volunteerprovidedneeds`
 (
  `volunterprovidedneedid` bigint unsigned NOT NULL AUTO_INCREMENT ,
  `volunteerid`            bigint unsigned NOT NULL ,
@@ -305,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `VolunteerProvidedNeeds`
 
 PRIMARY KEY (`volunterprovidedneedid`),
 KEY `fkIdx_100` (`volunteerid`),
-CONSTRAINT `FK_99` FOREIGN KEY `fkIdx_100` (`volunteerid`) REFERENCES `Volunteers` (`volunteerid`)
+CONSTRAINT `FK_99` FOREIGN KEY `fkIdx_100` (`volunteerid`) REFERENCES `volunteers` (`volunteerid`)
 );
 
 
@@ -313,13 +314,13 @@ CONSTRAINT `FK_99` FOREIGN KEY `fkIdx_100` (`volunteerid`) REFERENCES `Volunteer
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `MobileVerificationQueue`;
+DROP TABLE IF EXISTS `mobileverificationqueue`;
 
 
 
--- ************************************** `MobileVerificationQueue`
+-- ************************************** `mobileverificationqueue`
 
-CREATE TABLE IF NOT EXISTS `MobileVerificationQueue`
+CREATE TABLE IF NOT EXISTS `mobileverificationqueue`
 (
  `itemid`       bigint unsigned NOT NULL AUTO_INCREMENT ,
  `mobilenumber` varchar(16) NOT NULL ,
@@ -328,6 +329,7 @@ CREATE TABLE IF NOT EXISTS `MobileVerificationQueue`
  `date_expiry`  datetime NOT NULL ,
  `entityid`     bigint NOT NULL ,
  `entitytype`   varchar(8) NOT NULL ,
+ `isprocessed`  bit not null,
 
 PRIMARY KEY (`itemid`),
 UNIQUE KEY `uq_mobilequeue_mobile_otp` (`mobilenumber`, `otp`)
@@ -336,13 +338,13 @@ UNIQUE KEY `uq_mobilequeue_mobile_otp` (`mobilenumber`, `otp`)
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 
-DROP TABLE IF EXISTS `NewRequestWaitingQueue`;
+DROP TABLE IF EXISTS `newrequestwaitingqueue`;
 
 
 
--- ************************************** `NewRequestWaitingQueue`
+-- ************************************** `newrequestwaitingqueue`
 
-CREATE TABLE IF NOT EXISTS `NewRequestWaitingQueue`
+CREATE TABLE IF NOT EXISTS `newrequestwaitingqueue`
 (
  `itemid`      bigint unsigned NOT NULL AUTO_INCREMENT ,
  `requestid`   bigint NOT NULL ,
@@ -351,4 +353,17 @@ CREATE TABLE IF NOT EXISTS `NewRequestWaitingQueue`
 
 PRIMARY KEY (`itemid`)
 );
+DROP TABLE IF EXISTS `PROPERTIES`;
 
+create table PROPERTIES 
+(
+id integer not null auto_increment,
+ CREATED_ON datetime ,
+ APPLICATION varchar(255), 
+ PROFILE varchar(255), 
+ LABEL varchar(255),
+ PROP_KEY varchar(255), 
+ VALUE varchar(255), 
+ primary key (id));
+
+-- SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
