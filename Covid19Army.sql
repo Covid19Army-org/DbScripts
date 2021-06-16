@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `activitylog`
  `activitytypeid` int NOT NULL ,
  `entitytype`     varchar(8) NOT NULL ,
  `entityid`       bigint NOT NULL ,
- `date_created`   datetime NOT NULL ,
+ `date_created`   int NOT NULL ,
  `clientip`		  varchar(32) NOT NULL,
 
 PRIMARY KEY (`activitylogid`)
