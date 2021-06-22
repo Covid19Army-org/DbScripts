@@ -1,3 +1,6 @@
+create database covid19army;
+use covid19army;
+
 -- ****************** SqlDBM: MySQL ******************;
 -- ***************************************************;
 -- SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS; 
@@ -365,5 +368,28 @@ id integer not null auto_increment,
  PROP_KEY varchar(255), 
  VALUE varchar(255), 
  primary key (id));
+ 
+ CREATE TABLE IF NOT EXISTS `quickhelp`
+(
+ `quickhelpid`  bigint unsigned NOT NULL AUTO_INCREMENT ,
+ `userid`    	bigint unsigned NOT NULL ,
+ `volunteerid`  bigint unsigned NOT NULL ,
+ `state` 		varchar(256) NULL ,
+ `district`     varchar(256) NULL ,
+ `availability_pincodes`      varchar(2048) NULL ,
+ `date_created`   datetime NOT NULL ,
+ `comments`		  varchar(512) NOT NULL,
+
+PRIMARY KEY (`quickhelpid`)
+);
+
+create table if not exists `quickhelpneeds`(
+`quickhelpneedid` bigint unsigned not null auto_increment,
+`quickhelpid` bigint unsigned not null,
+`needid` int not null,
+primary key (`quickhelpneedid`),
+KEY `fkIdx_200` (`quickhelpid`),
+CONSTRAINT `FK_199` FOREIGN KEY `fkIdx_200` (`quickhelpid`) REFERENCES `quickhelp` (`quickhelpid`)
+)
 
 -- SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
